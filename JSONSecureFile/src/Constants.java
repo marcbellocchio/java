@@ -13,6 +13,7 @@ public interface Constants
 {
 	/** ### JSON Constants ### */	
 	
+	
     /**  */
     public static final String JSON_Marker_Begin = "{";
     
@@ -30,6 +31,10 @@ public interface Constants
 	public static final  String Version_1_Fields = "version" + " category"  + " filetype" + " hash" + " data";
 
     /** need to comment ? */
-    public static final int Zero = 0; 
+    public static final int Zero = 0;
+    
+	/** ### CRYPTO Constants ### */	    
+    /**  */
+    public static final String TWOFISH = "twofish";
 
 }

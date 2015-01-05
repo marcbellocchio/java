@@ -27,7 +27,7 @@ public class JSONSF_main {
     "------------------------------------------------------------------------------\n" +
     "| Command Line: dnssd <option> [parameters]                                  |\n" +
     "------------------------------------------------------------------------------\n" +
-    "dnssd -E                         (Enumerate recommended registration domains)\n" +
+    "dnssd -E <algo> <key> <IV> <plain>											   \n" +
     "dnssd -F                             (Enumerate recommended browsing domains)\n" +
     "dnssd -B        <Type> [<Domain>]             (Browse for services instances)\n" +
     "dnssd -L <Name> <Type> [<Domain>]                (Look up a service instance)\n" +
@@ -62,34 +62,63 @@ public class JSONSF_main {
 	                
 	                String temp = args[0];
 	                
+	                
+	                
+	                
 	                if ((temp != null) && ((temp.length() == 2) || (temp.length() == 3)) &&
 	                (temp.startsWith("-") || temp.startsWith("--")))
 	                {
 
-	                    char option = temp.charAt(temp.length() - 1);
+	                    //char option = temp.charAt(temp.length() - 1);
+	            
 	                    ExecutionTimer._start();
-	                    switch (option)
+	                    
+	                    
+	                    switch (temp)
 	                    {
-	                        case 'E':
-	                            // Enumerate recommended registration domains
+	                        // encrypt
+	                        case "-E":
+	                        case "--E":	                        	
+	                            // start timer
 	                            ExecutionTimer._start();
 
-	                            System.out.println("Mydnssd: Registration Domains:");
-
-	                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");
-	                            break;
-	                        case 'B':
+	                            System.out.println("Encryption is starting");
+	                            if ((args.length < 5) || (args[1] == null) || (args[1].length() == 0))
+	                            {
+	                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -E option");
+	                            }
+	                            else{
+	                            	switch (args[1].toLowerCase()){
+	                            	
+	                            		case Constants.TWOFISH:
+	    	                        		byte[] result = null;
+	                            			
+	    	                        		JSONSF_CryptoCipher Cipher = new JSONSF_CryptoCipher();
+	    	                        		
+	    	                        		result = Cipher.TwoFishCBC(args[2].toLowerCase().getBytes(), args[3].toLowerCase().getBytes(), args[4].toLowerCase().getBytes());
+	    	                        		System.out.println("\n" + " Encryption result is " + result.toString());
+	    	                        		break;
+	                            		default:
+	                            			throw new IllegalArgumentException("jsonsecurefile algo not supported for -E option" + args[1] );
+	                          	
+	                            	
+	                            	}// end switch (args[1].toLowerCase()){                            	
+	                            }// end else
+	                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");                            
+	                            break;	
+						case "-B":
 	                            // Browse for service instances
 	                            if ((args.length < 2) || (args[1] == null) || (args[1].length() == 0))
 	                            {
-	                                throw new IllegalArgumentException("Mydnssd Too few arguments for -B option");
+	                                throw new IllegalArgumentException("jsonsecurefile Too few arguments for -B option");
 	                            }
 	                            
 
 	                            System.out.println("\n" + timingBuilder.toString() + " - took " + ExecutionTimer._took(TimeUnit.SECONDS) + " seconds.");
 	                            break;
                            
-	                        case 'T':
+	                        case "-T":
+	                        case "--T":	
 	                        	
 	                        	// hash test 
 	                        	JSONSF_Test testclass = new JSONSF_Test(); 
@@ -140,7 +169,6 @@ public class JSONSF_main {
     }// end printHelp
 
 }
-
 
 
 
